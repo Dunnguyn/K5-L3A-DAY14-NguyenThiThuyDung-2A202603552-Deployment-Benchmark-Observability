@@ -1,0 +1,858 @@
+{
+  "alert_experiments": {
+    "A_and_B": {
+      "start": "2026-11-25T17:11:20.654348+00:00",
+      "observed": {
+        "AgentHighErrorRate": {
+          "seconds": 87.7,
+          "alert": {
+            "labels": {
+              "alertname": "AgentHighErrorRate",
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Error rate hiện tại: 18.36% (SLO: < 5%)",
+              "summary": "Error rate /ask vượt 5%"
+            },
+            "state": "firing",
+            "activeAt": "2026-11-25T17:11:47.401817116Z",
+            "value": "1.8364197530864196e-01"
+          }
+        },
+        "AgentHighLatencyP95": {
+          "seconds": 147.8,
+          "alert": {
+            "labels": {
+              "alertname": "AgentHighLatencyP95",
+              "severity": "warning"
+            },
+            "annotations": {
+              "description": "p95 hiện tại: 1.89s (SLO: < 1s)",
+              "summary": "p95 latency /ask vượt 1 giây"
+            },
+            "state": "firing",
+            "activeAt": "2026-11-25T17:11:47.401817116Z",
+            "value": "1.8900871459694988e+00"
+          }
+        }
+      },
+      "snapshot": [
+        {
+          "labels": {
+            "alertname": "AgentHighErrorRate",
+            "severity": "critical"
+          },
+          "annotations": {
+            "description": "Error rate hiện tại: 20.17% (SLO: < 5%)",
+            "summary": "Error rate /ask vượt 5%"
+          },
+          "state": "firing",
+          "activeAt": "2026-11-25T17:11:47.401817116Z",
+          "value": "2.0168483647175423e-01"
+        },
+        {
+          "labels": {
+            "alertname": "AgentHighLatencyP95",
+            "severity": "warning"
+          },
+          "annotations": {
+            "description": "p95 hiện tại: 1.89s (SLO: < 1s)",
+            "summary": "p95 latency /ask vượt 1 giây"
+          },
+          "state": "firing",
+          "activeAt": "2026-11-25T17:11:47.401817116Z",
+          "value": "1.8900871459694988e+00"
+        },
+        {
+          "labels": {
+            "alertname": "LLMCostBurnRateHigh",
+            "severity": "warning"
+          },
+          "annotations": {
+            "description": "Tốc độ chi tiêu hiện tại: $4.91/giờ",
+            "summary": "Chi phí LLM đang vượt $2/giờ"
+          },
+          "state": "firing",
+          "activeAt": "2026-11-25T17:08:27.571501534Z",
+          "value": "4.907321270061027e+00"
+        }
+      ]
+    },
+    "C": {
+      "cost": [
+        {
+          "metric": {},
+          "value": [
+            1795626932.539,
+            "10.862116650077372"
+          ]
+        }
+      ],
+      "alerts": [
+        {
+          "labels": {
+            "alertname": "LLMCostBurnRateHigh",
+            "severity": "warning"
+          },
+          "annotations": {
+            "description": "Tốc độ chi tiêu hiện tại: $9.47/giờ",
+            "summary": "Chi phí LLM đang vượt $2/giờ"
+          },
+          "state": "firing",
+          "activeAt": "2026-11-25T17:08:27.571501534Z",
+          "value": "9.469123464569812e+00"
+        }
+      ]
+    },
+    "D": {
+      "start": "2026-11-25T17:18:31.453682+00:00",
+      "observed": {
+        "AgentInstanceDown": {
+          "seconds": 36.2,
+          "alert": {
+            "labels": {
+              "alertname": "AgentInstanceDown",
+              "instance": "172.18.0.6:8000",
+              "job": "agent",
+              "severity": "critical"
+            },
+            "annotations": {
+              "description": "Prometheus không gọi được /metrics của 172.18.0.6:8000 trong 30s",
+              "summary": "Instance agent 172.18.0.6:8000 không scrape được"
+            },
+            "state": "firing",
+            "activeAt": "2026-11-25T17:18:37.401817116Z",
+            "value": "0e+00"
+          }
+        }
+      },
+      "snapshot": [
+        {
+          "labels": {
+            "alertname": "AgentInstanceDown",
+            "instance": "172.18.0.6:8000",
+            "job": "agent",
+            "severity": "critical"
+          },
+          "annotations": {
+            "description": "Prometheus không gọi được /metrics của 172.18.0.6:8000 trong 30s",
+            "summary": "Instance agent 172.18.0.6:8000 không scrape được"
+          },
+          "state": "firing",
+          "activeAt": "2026-11-25T17:18:37.401817116Z",
+          "value": "0e+00"
+        },
+        {
+          "labels": {
+            "alertname": "LLMCostBurnRateHigh",
+            "severity": "warning"
+          },
+          "annotations": {
+            "description": "Tốc độ chi tiêu hiện tại: $9.35/giờ",
+            "summary": "Chi phí LLM đang vượt $2/giờ"
+          },
+          "state": "firing",
+          "activeAt": "2026-11-25T17:08:27.571501534Z",
+          "value": "9.349643484954727e+00"
+        }
+      ]
+    },
+    "E": {
+      "health": {
+        "status": "ok",
+        "version": "1.0.0",
+        "agent_version": "v1",
+        "instance": "685034f8558b"
+      },
+      "info": [
+        {
+          "metric": {
+            "__name__": "agent_info",
+            "instance": "172.18.0.8:8000",
+            "job": "agent",
+            "model": "mock-llm-small",
+            "version": "v1"
+          },
+          "value": [
+            1795626995.231,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "agent_info",
+            "instance": "172.18.0.6:8000",
+            "job": "agent",
+            "model": "mock-llm-small",
+            "version": "v1"
+          },
+          "value": [
+            1795626995.231,
+            "1"
+          ]
+        },
+        {
+          "metric": {
+            "__name__": "agent_info",
+            "instance": "172.18.0.9:8000",
+            "job": "agent",
+            "model": "mock-llm-small",
+            "version": "v1"
+          },
+          "value": [
+            1795626995.231,
+            "1"
+          ]
+        }
+      ],
+      "alerts": [
+        {
+          "labels": {
+            "alertname": "LLMCostBurnRateHigh",
+            "severity": "warning"
+          },
+          "annotations": {
+            "description": "Tốc độ chi tiêu hiện tại: $10.80/giờ",
+            "summary": "Chi phí LLM đang vượt $2/giờ"
+          },
+          "state": "firing",
+          "activeAt": "2026-11-25T17:08:27.571501534Z",
+          "value": "1.0803171755961461e+01"
+        }
+      ]
+    }
+  },
+  "prometheus_30_user_sample": {
+    "p95": [
+      {
+        "metric": {},
+        "value": [
+          1795627053.693,
+          "0.2941208868662007"
+        ]
+      }
+    ],
+    "avg": [
+      {
+        "metric": {},
+        "value": [
+          1795627053.697,
+          "0.23610504931349993"
+        ]
+      }
+    ],
+    "instances": [
+      {
+        "metric": {
+          "instance": "172.18.0.6:8000"
+        },
+        "value": [
+          1795627053.7,
+          "10"
+        ]
+      },
+      {
+        "metric": {
+          "instance": "172.18.0.8:8000"
+        },
+        "value": [
+          1795627053.7,
+          "9.6"
+        ]
+      }
+    ],
+    "tokens": [
+      {
+        "metric": {
+          "type": "input"
+        },
+        "value": [
+          1795627053.704,
+          "603.6936625454546"
+        ]
+      },
+      {
+        "metric": {
+          "type": "output"
+        },
+        "value": [
+          1795627053.704,
+          "319.7627195151515"
+        ]
+      }
+    ]
+  },
+  "prometheus_fault_sample": {
+    "p95": [
+      {
+        "metric": {},
+        "value": [
+          1795626828.654,
+          "1.8900871459694988"
+        ]
+      }
+    ],
+    "avg": [
+      {
+        "metric": {},
+        "value": [
+          1795626828.654,
+          "0.5616547650580072"
+        ]
+      }
+    ],
+    "instances": [
+      {
+        "metric": {
+          "instance": "172.18.0.6:8000"
+        },
+        "value": [
+          1795626828.654,
+          "12.236363636363635"
+        ]
+      },
+      {
+        "metric": {
+          "instance": "172.18.0.9:8000"
+        },
+        "value": [
+          1795626828.654,
+          "12.218181818181819"
+        ]
+      },
+      {
+        "metric": {
+          "instance": "172.18.0.8:8000"
+        },
+        "value": [
+          1795626828.654,
+          "12.236363636363635"
+        ]
+      }
+    ],
+    "tokens": [
+      {
+        "metric": {
+          "type": "input"
+        },
+        "value": [
+          1795626828.654,
+          "2313.981818181818"
+        ]
+      },
+      {
+        "metric": {
+          "type": "output"
+        },
+        "value": [
+          1795626828.654,
+          "1347.381818181818"
+        ]
+      }
+    ],
+    "cost": [
+      {
+        "metric": {},
+        "value": [
+          1795626828.654,
+          "4.920047203938589"
+        ]
+      }
+    ]
+  },
+  "jaeger_traces": {
+    "slow": {
+      "traceID": "b0d80fc24318f42b662d4dd947f2b6a4",
+      "spans": [
+        {
+          "traceId": "b0d80fc24318f42b662d4dd947f2b6a4",
+          "spanId": "421d1287a5777f28",
+          "parentSpanId": "8f7efc6895fc632e",
+          "flags": 256,
+          "name": "agent.retrieve_context",
+          "kind": 1,
+          "startTimeUnixNano": "1795626826317545863",
+          "endTimeUnixNano": "1795626826343663244",
+          "attributes": [
+            {
+              "key": "retrieval.documents",
+              "value": {
+                "intValue": "1"
+              }
+            }
+          ],
+          "status": {}
+        },
+        {
+          "traceId": "b0d80fc24318f42b662d4dd947f2b6a4",
+          "spanId": "b9ca4926cb784343",
+          "parentSpanId": "8f7efc6895fc632e",
+          "flags": 256,
+          "name": "chat mock-llm-small",
+          "kind": 1,
+          "startTimeUnixNano": "1795626826343823373",
+          "endTimeUnixNano": "1795626828037450494",
+          "attributes": [
+            {
+              "key": "gen_ai.operation.name",
+              "value": {
+                "stringValue": "chat"
+              }
+            },
+            {
+              "key": "gen_ai.provider.name",
+              "value": {
+                "stringValue": "mock"
+              }
+            },
+            {
+              "key": "gen_ai.request.model",
+              "value": {
+                "stringValue": "mock-llm-small"
+              }
+            },
+            {
+              "key": "gen_ai.usage.input_tokens",
+              "value": {
+                "intValue": "79"
+              }
+            },
+            {
+              "key": "gen_ai.usage.output_tokens",
+              "value": {
+                "intValue": "46"
+              }
+            },
+            {
+              "key": "llm.cost_usd",
+              "value": {
+                "doubleValue": 3.945e-05
+              }
+            }
+          ],
+          "status": {}
+        },
+        {
+          "traceId": "b0d80fc24318f42b662d4dd947f2b6a4",
+          "spanId": "8f7efc6895fc632e",
+          "parentSpanId": "97db2271abbe2b84",
+          "flags": 256,
+          "name": "agent.run",
+          "kind": 1,
+          "startTimeUnixNano": "1795626826317491211",
+          "endTimeUnixNano": "1795626828037574705",
+          "attributes": [
+            {
+              "key": "agent.question.length",
+              "value": {
+                "intValue": "28"
+              }
+            },
+            {
+              "key": "agent.version",
+              "value": {
+                "stringValue": "v2"
+              }
+            }
+          ],
+          "status": {}
+        },
+        {
+          "traceId": "b0d80fc24318f42b662d4dd947f2b6a4",
+          "spanId": "97db2271abbe2b84",
+          "flags": 256,
+          "name": "POST /ask",
+          "kind": 2,
+          "startTimeUnixNano": "1795626826314040052",
+          "endTimeUnixNano": "1795626828039275354",
+          "attributes": [
+            {
+              "key": "http.flavor",
+              "value": {
+                "stringValue": "1.1"
+              }
+            },
+            {
+              "key": "http.host",
+              "value": {
+                "stringValue": "172.18.0.9:8000"
+              }
+            },
+            {
+              "key": "http.method",
+              "value": {
+                "stringValue": "POST"
+              }
+            },
+            {
+              "key": "http.route",
+              "value": {
+                "stringValue": "/ask"
+              }
+            },
+            {
+              "key": "http.scheme",
+              "value": {
+                "stringValue": "http"
+              }
+            },
+            {
+              "key": "http.server_name",
+              "value": {
+                "stringValue": "127.0.0.1"
+              }
+            },
+            {
+              "key": "http.status_code",
+              "value": {
+                "intValue": "200"
+              }
+            },
+            {
+              "key": "http.target",
+              "value": {
+                "stringValue": "/ask"
+              }
+            },
+            {
+              "key": "http.url",
+              "value": {
+                "stringValue": "http://127.0.0.1/ask"
+              }
+            },
+            {
+              "key": "http.user_agent",
+              "value": {
+                "stringValue": "Python-urllib/3.14"
+              }
+            },
+            {
+              "key": "net.host.port",
+              "value": {
+                "intValue": "8000"
+              }
+            },
+            {
+              "key": "net.peer.ip",
+              "value": {
+                "stringValue": "172.18.0.4"
+              }
+            },
+            {
+              "key": "net.peer.port",
+              "value": {
+                "intValue": "52400"
+              }
+            }
+          ],
+          "status": {}
+        }
+      ]
+    },
+    "error": {
+      "traceID": "1e3fc2d89695503094a8c3edc71094f9",
+      "spans": [
+        {
+          "traceId": "1e3fc2d89695503094a8c3edc71094f9",
+          "spanId": "77c8efeae57dff81",
+          "parentSpanId": "0686239f0d1643b2",
+          "flags": 256,
+          "name": "agent.retrieve_context",
+          "kind": 1,
+          "startTimeUnixNano": "1795626828106802604",
+          "endTimeUnixNano": "1795626828128296698",
+          "attributes": [
+            {
+              "key": "retrieval.documents",
+              "value": {
+                "intValue": "1"
+              }
+            }
+          ],
+          "status": {}
+        },
+        {
+          "traceId": "1e3fc2d89695503094a8c3edc71094f9",
+          "spanId": "70f8cf1181ef1e1a",
+          "parentSpanId": "0686239f0d1643b2",
+          "flags": 256,
+          "name": "chat mock-llm-small",
+          "kind": 1,
+          "startTimeUnixNano": "1795626828128452078",
+          "endTimeUnixNano": "1795626828947708299",
+          "attributes": [
+            {
+              "key": "error.type",
+              "value": {
+                "stringValue": "upstream_unavailable"
+              }
+            },
+            {
+              "key": "gen_ai.operation.name",
+              "value": {
+                "stringValue": "chat"
+              }
+            },
+            {
+              "key": "gen_ai.provider.name",
+              "value": {
+                "stringValue": "mock"
+              }
+            },
+            {
+              "key": "gen_ai.request.model",
+              "value": {
+                "stringValue": "mock-llm-small"
+              }
+            }
+          ],
+          "events": [
+            {
+              "timeUnixNano": "1795626828947631025",
+              "name": "exception",
+              "attributes": [
+                {
+                  "key": "exception.escaped",
+                  "value": {
+                    "stringValue": "False"
+                  }
+                },
+                {
+                  "key": "exception.message",
+                  "value": {
+                    "stringValue": "Upstream LLM error: 503 Service Unavailable (mock)"
+                  }
+                },
+                {
+                  "key": "exception.stacktrace",
+                  "value": {
+                    "stringValue": "Traceback (most recent call last):\n  File \"/app/app/main.py\", line 153, in run_agent\n    result = await mock_llm.generate(question, context=context,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/utils/mock_llm.py\", line 199, in generate\n    raise LLMError(\"Upstream LLM error: 503 Service Unavailable (mock)\")\nutils.mock_llm.LLMError: Upstream LLM error: 503 Service Unavailable (mock)\n"
+                  }
+                },
+                {
+                  "key": "exception.type",
+                  "value": {
+                    "stringValue": "utils.mock_llm.LLMError"
+                  }
+                }
+              ]
+            }
+          ],
+          "status": {
+            "message": "LLMError: Upstream LLM error: 503 Service Unavailable (mock)",
+            "code": 2
+          }
+        },
+        {
+          "traceId": "1e3fc2d89695503094a8c3edc71094f9",
+          "spanId": "0686239f0d1643b2",
+          "parentSpanId": "9b72d60224d53a46",
+          "flags": 256,
+          "name": "agent.run",
+          "kind": 1,
+          "startTimeUnixNano": "1795626828106754054",
+          "endTimeUnixNano": "1795626828948231424",
+          "attributes": [
+            {
+              "key": "agent.question.length",
+              "value": {
+                "intValue": "28"
+              }
+            },
+            {
+              "key": "agent.version",
+              "value": {
+                "stringValue": "v2"
+              }
+            }
+          ],
+          "events": [
+            {
+              "timeUnixNano": "1795626828948214813",
+              "name": "exception",
+              "attributes": [
+                {
+                  "key": "exception.escaped",
+                  "value": {
+                    "stringValue": "False"
+                  }
+                },
+                {
+                  "key": "exception.message",
+                  "value": {
+                    "stringValue": "Upstream LLM error: 503 Service Unavailable (mock)"
+                  }
+                },
+                {
+                  "key": "exception.stacktrace",
+                  "value": {
+                    "stringValue": "Traceback (most recent call last):\n  File \"/home/agent/.local/lib/python3.11/site-packages/opentelemetry/trace/__init__.py\", line 602, in use_span\n    yield span\n  File \"/home/agent/.local/lib/python3.11/site-packages/opentelemetry/sdk/trace/__init__.py\", line 1136, in start_as_current_span\n    yield span\n  File \"/home/agent/.local/lib/python3.11/site-packages/opentelemetry/trace/__init__.py\", line 441, in start_as_current_span\n    yield span\n  File \"/app/app/main.py\", line 153, in run_agent\n    result = await mock_llm.generate(question, context=context,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/utils/mock_llm.py\", line 199, in generate\n    raise LLMError(\"Upstream LLM error: 503 Service Unavailable (mock)\")\nutils.mock_llm.LLMError: Upstream LLM error: 503 Service Unavailable (mock)\n"
+                  }
+                },
+                {
+                  "key": "exception.type",
+                  "value": {
+                    "stringValue": "utils.mock_llm.LLMError"
+                  }
+                }
+              ]
+            }
+          ],
+          "status": {
+            "message": "LLMError: Upstream LLM error: 503 Service Unavailable (mock)",
+            "code": 2
+          }
+        },
+        {
+          "traceId": "1e3fc2d89695503094a8c3edc71094f9",
+          "spanId": "9b72d60224d53a46",
+          "flags": 256,
+          "name": "POST /ask",
+          "kind": 2,
+          "startTimeUnixNano": "1795626828105308451",
+          "endTimeUnixNano": "1795626828950037509",
+          "attributes": [
+            {
+              "key": "http.flavor",
+              "value": {
+                "stringValue": "1.1"
+              }
+            },
+            {
+              "key": "http.host",
+              "value": {
+                "stringValue": "172.18.0.9:8000"
+              }
+            },
+            {
+              "key": "http.method",
+              "value": {
+                "stringValue": "POST"
+              }
+            },
+            {
+              "key": "http.route",
+              "value": {
+                "stringValue": "/ask"
+              }
+            },
+            {
+              "key": "http.scheme",
+              "value": {
+                "stringValue": "http"
+              }
+            },
+            {
+              "key": "http.server_name",
+              "value": {
+                "stringValue": "127.0.0.1"
+              }
+            },
+            {
+              "key": "http.status_code",
+              "value": {
+                "intValue": "503"
+              }
+            },
+            {
+              "key": "http.target",
+              "value": {
+                "stringValue": "/ask"
+              }
+            },
+            {
+              "key": "http.url",
+              "value": {
+                "stringValue": "http://127.0.0.1/ask"
+              }
+            },
+            {
+              "key": "http.user_agent",
+              "value": {
+                "stringValue": "Python-urllib/3.14"
+              }
+            },
+            {
+              "key": "net.host.port",
+              "value": {
+                "intValue": "8000"
+              }
+            },
+            {
+              "key": "net.peer.ip",
+              "value": {
+                "stringValue": "172.18.0.4"
+              }
+            },
+            {
+              "key": "net.peer.port",
+              "value": {
+                "intValue": "36522"
+              }
+            }
+          ],
+          "status": {
+            "code": 2
+          }
+        }
+      ]
+    }
+  },
+  "matching_agent_logs": [
+    {
+      "ts": "2026-11-25T17:13:48.037677+00:00",
+      "level": "INFO",
+      "service": "observable-agent",
+      "instance": "9529c8e56816",
+      "event": "llm_call",
+      "trace_id": "b0d80fc24318f42b662d4dd947f2b6a4",
+      "span_id": "97db2271abbe2b84",
+      "request_id": "e03f61abdc6f",
+      "model": "mock-llm-small",
+      "agent_version": "v2",
+      "input_tokens": 79,
+      "output_tokens": 46,
+      "cost_usd": 3.9e-05,
+      "llm_ms": 1692.6
+    },
+    {
+      "ts": "2026-11-25T17:13:48.038453+00:00",
+      "level": "INFO",
+      "service": "observable-agent",
+      "instance": "9529c8e56816",
+      "event": "http_request",
+      "trace_id": "b0d80fc24318f42b662d4dd947f2b6a4",
+      "span_id": "97db2271abbe2b84",
+      "request_id": "e03f61abdc6f",
+      "method": "POST",
+      "route": "/ask",
+      "status": 200,
+      "ms": 1724.1
+    },
+    {
+      "ts": "2026-11-25T17:13:48.948395+00:00",
+      "level": "INFO",
+      "service": "observable-agent",
+      "instance": "9529c8e56816",
+      "event": "llm_error",
+      "trace_id": "1e3fc2d89695503094a8c3edc71094f9",
+      "span_id": "9b72d60224d53a46",
+      "request_id": "9eb7d244e8a7",
+      "error": "Upstream LLM error: 503 Service Unavailable (mock)"
+    },
+    {
+      "ts": "2026-11-25T17:13:48.949022+00:00",
+      "level": "INFO",
+      "service": "observable-agent",
+      "instance": "9529c8e56816",
+      "event": "http_request",
+      "trace_id": "1e3fc2d89695503094a8c3edc71094f9",
+      "span_id": "9b72d60224d53a46",
+      "request_id": "9eb7d244e8a7",
+      "method": "POST",
+      "route": "/ask",
+      "status": 503,
+      "ms": 843.4
+    }
+  ]
+}

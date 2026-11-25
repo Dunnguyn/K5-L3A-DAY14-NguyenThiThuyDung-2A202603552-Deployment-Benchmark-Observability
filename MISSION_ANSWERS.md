@@ -825,4 +825,5 @@ Runtime CP5 đã được dọn, gồm các container kiểm thử, network và 
 
 - Yêu cầu gửi Codex là chạy stack Docker, benchmark scale và thu bằng chứng observability.
 - Codex chẩn đoán lỗi import Uvicorn trong container, sửa đường dẫn Python user base, chạy lại health check và promtool, chạy Locust với một và ba replica và chụp Grafana dưới tải. CP8 ghi nhận kết quả từ HTTP thật và CSV gốc.
+- Codex chạy thêm Locust với 30 user và hai replica, áp dụng fault injection, đọc live Prometheus, đối chiếu hai trace Jaeger với log JSON và xác minh bốn ảnh observability. Report ghi riêng alert cost đã firing trước khi đổi model.
 - Phần sinh viên tự sửa hoặc tự kiểm CP8 chưa được ghi nhận.

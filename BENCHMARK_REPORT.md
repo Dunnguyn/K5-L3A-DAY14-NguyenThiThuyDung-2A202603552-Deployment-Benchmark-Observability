@@ -81,39 +81,43 @@ python eval/run_eval.py --url http://127.0.0.1:8002 --min-accuracy 1.0 \
 
 Stack chạy với project `k5-day14-observability`. Image ban đầu tìm thấy script Uvicorn nhưng thiếu module khi chạy bằng user `agent`. Đặt `PYTHONUSERBASE=/home/agent/.local` để Python tìm thấy dependencies được copy từ builder. Build lại rồi kiểm `GET /health` qua Nginx trả 200. Lượt Locust trong lúc agent chưa boot bị loại khỏi số liệu. `promtool test rules /p/alert_rules_test.yml` báo SUCCESS với file gốc.
 
-### 4.1 Screenshot
+### 4.1 Dashboard và metrics (Exercise 7.4)
 
-- [x] [Dashboard Grafana dưới tải](screenshots/grafana-dashboard.png), có traffic, lỗi, p95, in-flight và số instance.
-- [ ] Một trace chậm trong Jaeger (thấy span nào chiếm thời gian)
-- [ ] Một trace lỗi trong Jaeger (có event `exception`)
-- [ ] Trang Alerts của Prometheus với hai alert cùng **firing**.
+- [x] [Grafana dưới tải](screenshots/grafana-dashboard.png) hiển thị Golden Signals.
+- [x] [Jaeger trace chậm](screenshots/jaeger-slow-trace.png) và [Jaeger trace lỗi](screenshots/jaeger-error-trace.png) có các span tương ứng.
+- [x] [Prometheus Alerts](screenshots/prometheus-alert-firing.png) hiển thị hai cảnh báo SLO cùng firing.
 
-### 4.2 Thí nghiệm "phá hệ thống"
+Trong lượt Locust 30 users, ramp 5 users/giây và hai replica, mẫu Prometheus ghi p95 **294.1 ms** và avg **236.1 ms**. Khoảng cách phản ánh nhóm request ở đuôi phân phối. Tốc độ đo theo instance là 10.00 và 9.60 req/s. Input và output lần lượt **603.7** và **319.8** token/s. Input gồm prompt và context retrieval, trong khi output chỉ tính câu trả lời. Nginx trả 404 cho `/metrics`. Prometheus scrape các container agent qua mạng Compose.
 
-| # | Thay đổi | Alert nào firing | Thời gian từ lúc đổi → firing | Panel nào phản ánh rõ nhất |
+### 4.2 Fault injection và thời gian phát hiện (Exercise 7.6)
+
+Áp dụng A và B cùng lúc với 30 client làm tải để chụp hai alert cùng firing. Poll `/api/v1/alerts` mỗi 2 giây. Thời gian tính từ lúc bắt đầu áp dụng cấu hình hoặc gọi pause đến lần thấy firing đầu tiên, gồm thời gian scrape và điều kiện `for`.
+
+| # | Thay đổi | Quan sát | Thời gian | Panel |
 |---|---|---|---|---|
-| A | `MOCK_ERROR_RATE=0.2` | | | |
-| B | `MOCK_SLOW_RATE=0.3` | | | |
-| C | `LLM_MODEL=mock-llm-large` | | | |
-| D | `docker pause` 1 instance | | | |
-| E | `AGENT_VERSION=v1` | | | |
+| A | `MOCK_ERROR_RATE=0.2` | `AgentHighErrorRate` firing ở 18.36% lỗi 5xx. | 87.7 s | Error rate |
+| B | `MOCK_SLOW_RATE=0.3` | `AgentHighLatencyP95` firing tại p95 1.89 s. | 147.8 s | Latency p95 |
+| C | `LLM_MODEL=mock-llm-large` | Cost burn rate đạt 10.86 USD/giờ. `LLMCostBurnRateHigh` đã firing từ tải trước. | Trigger mới không quan sát được | Cost burn rate |
+| D | Pause một agent | `AgentInstanceDown` firing khi scrape có `up=0`. Sau đó unpause. | 36.2 s sau khi gọi pause | Instances up |
+| E | `AGENT_VERSION=v1` | `/health` trả ok và Prometheus thấy 3 instance v1. Alert cost cũ vẫn firing. Không quan sát thấy alert mới do đổi phiên bản. | Không áp dụng | Bảng version |
 
-**Thí nghiệm E không làm alert nào firing. Bạn sẽ phát hiện loại sự cố này trong production bằng cách nào?**
+Pause giữ container trong DNS nên Prometheus còn thấy target và báo `up=0`. Nginx có thể gửi lỗi hoặc timeout mà metric agent không đếm được, vì vậy cần đo thêm ở gateway. Suy giảm chất lượng của v1 cần eval trước deploy và kiểm tra chất lượng bằng tập câu hỏi cố định trong production. Alert hạ tầng chỉ nhìn thấy các tín hiệu vận hành.
 
-...
+### 4.3 Trace và đối chiếu log (Exercise 7.5)
 
-### 4.3 Debug bằng trace
-
-Chọn 1 trace chậm nhất bạn tìm được:
-
-- `trace_id`: ...
-- Tổng thời gian: ... ms
-- Span chiếm nhiều thời gian nhất: ... (... ms, ...%)
-- Dòng log tương ứng (grep theo `trace_id`):
+Trace chậm nhất trong mẫu Jaeger có log đối chiếu là `b0d80fc24318f42b662d4dd947f2b6a4`. Span HTTP mất **1725.24 ms**. Bên trong agent, `chat mock-llm-small` mất **1693.63 ms** (98.2% tổng thời gian) và retrieval mất 26.12 ms. [Ảnh Jaeger](screenshots/jaeger-slow-trace.png)
 
 ```json
-
+{"ts": "2026-11-25T17:13:48.037677+00:00", "level": "INFO", "service": "observable-agent", "instance": "9529c8e56816", "event": "llm_call", "trace_id": "b0d80fc24318f42b662d4dd947f2b6a4", "span_id": "97db2271abbe2b84", "request_id": "e03f61abdc6f", "model": "mock-llm-small", "agent_version": "v2", "input_tokens": 79, "output_tokens": 46, "cost_usd": 3.9e-05, "llm_ms": 1692.6}
 ```
+
+Trace lỗi `1e3fc2d89695503094a8c3edc71094f9` trả **HTTP 503** sau **844.73 ms**. Span chat mất 819.26 ms và chứa event `exception` với loại lỗi `utils.mock_llm.LLMError`. [Ảnh Jaeger](screenshots/jaeger-error-trace.png)
+
+```json
+{"ts": "2026-11-25T17:13:48.948395+00:00", "level": "INFO", "service": "observable-agent", "instance": "9529c8e56816", "event": "llm_error", "trace_id": "1e3fc2d89695503094a8c3edc71094f9", "span_id": "9b72d60224d53a46", "request_id": "9eb7d244e8a7", "error": "Upstream LLM error: 503 Service Unavailable (mock)"}
+```
+
+[Snapshot Prometheus, span Jaeger và log tương ứng](reports/observability.json)
 
 ---
 
@@ -132,10 +136,8 @@ P95 giảm từ 910 ms xuống 320 ms và throughput tăng từ 56.70 lên 59.50
 
 ## 6. Kết luận
 
-- 3 điều bạn học được về benchmark & observability:
-  1. ...
-  2. ...
-  3. ...
-- Nếu đưa agent này lên production thật, bạn sẽ thêm metric / alert nào nữa?
+1. Tail latency cho thấy nhóm request bị chậm ngay khi average còn thấp. Scale cải thiện p95 trong lượt này, còn p99 giữ ở khoảng 1.7 giây.
+2. Trace đã định vị thời gian chậm trong span gọi mock LLM. Log cùng trace ID xác nhận lỗi upstream 503 của request khác.
+3. Quality gate phát hiện v1 regression dù health vẫn 200. Cần theo dõi chất lượng cùng traffic, lỗi, latency và saturation.
 
-...
+Trong production, theo dõi 502/504 và latency tại gateway, budget burn theo thời gian, tỷ lệ retry và sai lệch eval/canary theo version. Giữ label có cardinality thấp và dùng trace ID trong log.
