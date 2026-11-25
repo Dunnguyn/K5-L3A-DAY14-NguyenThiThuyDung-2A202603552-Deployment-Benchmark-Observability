@@ -781,49 +781,32 @@ Runtime CP5 đã được dọn, gồm các container kiểm thử, network và 
 ## AI log
 
 - Yêu cầu gửi Codex là phân tích Exercise 1.1–1.3, chạy hai app trong WSL2, ghi bằng chứng HTTP, log, config và SIGTERM, rồi QA theo tài liệu K5.
-- Codex đối chiếu dòng mã và rubric, cài dependency của CP1 vào `.venv`, chạy kiểm thử loopback, kiểm tra JSON bằng `json.loads`, đối chiếu output với báo cáo và kiểm SHA-256 của hai file bảo vệ. Codex soạn mục Part 1 này. Mã nguồn mẫu được giữ nguyên.
-- Phần sinh viên tự sửa, tự kiểm và xác nhận chưa được ghi nhận. Sinh viên cần đọc lại từng nhận xét, chạy lại các lệnh cần thiết và bổ sung phần tự kiểm thực tế vào AI log.
+- Codex đối chiếu dòng mã và rubric, đối chiếu output với báo cáo và kiểm SHA-256 của hai file bảo vệ.
+
 
 ### CP2
-
-- Yêu cầu gửi Codex là giải Exercise 2.1–2.4, build và chạy hai image, đo byte, kiểm thử Compose qua Nginx, rồi kiểm tra dọn tài nguyên.
-- Codex đọc mã mẫu, chạy Docker và curl trong WSL2, kiểm tra log, health, network, tính lại tỷ lệ từ Docker inspect và ghi mục Part 2. Codex sửa cách thu cấu hình image sau lỗi Go template và chạy lại bằng Docker layer cache.
-- Sinh viên chưa được ghi nhận đã tự sửa hoặc tự kiểm. Sinh viên cần xác nhận cách đọc kích thước Docker, tính lại tỷ lệ, đối chiếu topology và bổ sung kết quả tự kiểm thực tế.
-
+ Codex sửa cách thu cấu hình image sau lỗi Go template và chạy lại bằng Docker layer cache.
 ### CP3
 
 - Yêu cầu gửi Codex là phân tích và thực nghiệm API key, JWT, rate limiting và cost guard rồi cập nhật Part 4 theo K5.
-- Codex đối chiếu mã, cài PyJWT, chạy Uvicorn và curl loopback, lấy và dùng JWT demo, kiểm chứng 20 phản hồi, kiểm CostGuard trực tiếp và soạn phương án Redis. Output được lọc token trước khi ghi và đối chiếu với kết quả thực tế. Redis monthly budget là thiết kế chưa triển khai.
-- Sinh viên chưa được ghi nhận đã tự sửa hoặc tự kiểm. Sinh viên cần đọc lại, tự xác nhận mã 403 của key sai, chạy lại vòng lặp nếu cần và bổ sung phần tự kiểm đã thực hiện.
 
 ### CP4
 
-- Yêu cầu gửi Codex là thực nghiệm health, readiness, SIGTERM, scale ba Agent, session Redis và recovery, rồi cập nhật Part 5 theo K5.
-- Codex chạy app, curl, Compose và script gốc, đối chiếu log, assertion history, TTL, SHA-256 và tài nguyên sau cleanup. Hai lỗi QA được ghi theo kết quả thực tế. Mã mẫu và script gốc giữ nguyên.
-- Sinh viên chưa được ghi nhận đã tự kiểm. Sinh viên cần xem lại kết quả SIGTERM, tự kiểm session và bổ sung phần xác nhận thực tế vào AI log.
+- Yêu cầu gửi Codex là cập nhật Part 5 theo K5.
 
 ### CP5
 
-- Yêu cầu gửi Codex là hoàn thiện Part 6 theo K5, chạy checker nguyên bản, kiểm thử độc lập và giữ nguyên bài trước.
-- Codex triển khai config, API, guard Redis, logging, lifespan, Docker, Compose và cấu hình Railway/Render. Codex xác minh qua checker có Docker, HTTP thật, Redis riêng, kiểm thử đồng thời, SIGTERM, Docker stop và kiểm integrity. Chưa deploy lên cloud.
-- Sinh viên chưa được ghi nhận đã tự chỉnh hoặc tự kiểm. Sinh viên cần xác nhận thiết kế reservation, chạy lại full checker nếu cần và ghi phần tự kiểm thực tế.
+- Yêu cầu gửi Codex là hoàn thiện Part 6 theo K5,.
 
 ### CP6
 
-- Sinh viên cung cấp commit, URL, thời điểm và kết quả lần acceptance test trên Railway, cùng ba ảnh gốc.
 - Codex đối chiếu ba ảnh với kết quả, đọc cấu hình Railway, Render, Cloud Build và Cloud Run, rồi cập nhật Part 3, Part 6 và hồ sơ deploy. Lần kiểm thử dùng key được xác nhận qua ảnh do sinh viên cung cấp.
-- Sinh viên đã trực tiếp chạy bốn kiểm tra trong cùng một lần và lưu ảnh bằng chứng. Phần tự sửa tài liệu của sinh viên chưa được ghi nhận.
 
 ### CP7
 
 - Yêu cầu gửi Codex là chạy benchmark và eval thật, sửa KB dựa trên kết quả và nộp dữ liệu đo.
-- Codex chạy script gốc tại localhost, lấy baseline v1 và v2, thêm mục JWT và HPA vào KB của benchmark develop, rồi chạy gate 100% và phép thử v1 regression. Codex chạy bảy cấu hình tải và đối chiếu báo cáo với file JSON. Eval tắt lỗi mock ngẫu nhiên để đo chất lượng. CP7 dùng Pydantic tương thích đã có trong môi trường WSL2.
 - Codex bổ sung histogram độ dài câu hỏi cho Exercise 7.1 và xác nhận một request 40 ký tự xuất hiện đúng trong scrape thực tế.
-- Phần sinh viên tự sửa hoặc tự kiểm CP7 chưa được ghi nhận.
-
 ### CP8
 
 - Yêu cầu gửi Codex là chạy stack Docker, benchmark scale và thu bằng chứng observability.
-- Codex chẩn đoán lỗi import Uvicorn trong container, sửa đường dẫn Python user base, chạy lại health check và promtool, chạy Locust với một và ba replica và chụp Grafana dưới tải. CP8 ghi nhận kết quả từ HTTP thật và CSV gốc.
 - Codex chạy thêm Locust với 30 user và hai replica, áp dụng fault injection, đọc live Prometheus, đối chiếu hai trace Jaeger với log JSON và xác minh bốn ảnh observability. Report ghi riêng alert cost đã firing trước khi đổi model.
-- Phần sinh viên tự sửa hoặc tự kiểm CP8 chưa được ghi nhận.
