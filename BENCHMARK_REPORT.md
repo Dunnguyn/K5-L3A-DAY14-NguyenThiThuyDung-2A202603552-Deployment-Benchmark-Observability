@@ -73,12 +73,14 @@ python eval/run_eval.py --url http://127.0.0.1:8002 --min-accuracy 1.0 \
 
 ## 4. Observability stack (production)
 
+Stack chạy với project `k5-day14-observability`. Image ban đầu tìm thấy script Uvicorn nhưng thiếu module khi chạy bằng user `agent`. Đặt `PYTHONUSERBASE=/home/agent/.local` để Python tìm thấy dependencies được copy từ builder. Build lại rồi kiểm `GET /health` qua Nginx trả 200. Lượt Locust trong lúc agent chưa boot bị loại khỏi số liệu. `promtool test rules /p/alert_rules_test.yml` báo SUCCESS với file gốc.
+
 ### 4.1 Screenshot
 
-- [ ] Dashboard Grafana khi đang có tải (thấy rõ Golden Signals)
+- [x] [Dashboard Grafana dưới tải](screenshots/grafana-dashboard.png), có traffic, lỗi, p95, in-flight và số instance.
 - [ ] Một trace chậm trong Jaeger (thấy span nào chiếm thời gian)
 - [ ] Một trace lỗi trong Jaeger (có event `exception`)
-- [ ] Trang Alerts của Prometheus với ít nhất 1 alert đang **firing**
+- [ ] Trang Alerts của Prometheus với hai alert cùng **firing**.
 
 ### 4.2 Thí nghiệm "phá hệ thống"
 
@@ -113,12 +115,12 @@ Chọn 1 trace chậm nhất bạn tìm được:
 
 | Số instance | RPS | p50 (ms) | p95 (ms) | p99 (ms) | Failures |
 |---|---|---|---|---|---|
-| 1 | | | | | |
-| 3 | | | | | |
+| 1 | 56.70 | 210 | 910 | 1700 | 67/6752 (0.99%) |
+| 3 | 59.50 | 200 | 320 | 1700 | 86/7093 (1.21%) |
 
-**Giải thích kết quả:** Scale có cải thiện p95 không? Nút thắt nằm ở đâu?
+Các hàng lấy từ POST `/ask` trong [CSV một replica](benchmark-results/scale_1_stats.csv) và [CSV ba replica](benchmark-results/scale_3_stats.csv). Cả hai lần chạy dùng 100 users, ramp 10 users/giây, 2 phút. `--no-deps` tránh Compose tự kích hoạt số replica mặc định khi tạo container Locust. Hai lượt đều báo lỗi HTTP 503 từ mock upstream.
 
-...
+P95 giảm từ 910 ms xuống 320 ms và throughput tăng từ 56.70 lên 59.50 req/s. P99 vẫn 1700 ms ở cả hai lượt, phù hợp với độ trễ mock bất thường còn xuất hiện sau scale. Tải Locust theo mô hình user với thời gian chờ giữa task nên throughput không tăng theo tỷ lệ replica. CP7 và CP8 chia sẻ máy trong một phần phép đo, vì vậy kết quả p95 có thể chịu ảnh hưởng tranh chấp tài nguyên.
 
 ---
 
