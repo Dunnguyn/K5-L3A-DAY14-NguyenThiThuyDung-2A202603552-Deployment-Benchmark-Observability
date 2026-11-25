@@ -813,3 +813,9 @@ Runtime CP5 đã được dọn, gồm các container kiểm thử, network và 
 - Sinh viên cung cấp commit, URL, thời điểm và kết quả lần acceptance test trên Railway, cùng ba ảnh gốc.
 - Codex đối chiếu ba ảnh với kết quả, đọc cấu hình Railway, Render, Cloud Build và Cloud Run, rồi cập nhật Part 3, Part 6 và hồ sơ deploy. Lần kiểm thử dùng key được xác nhận qua ảnh do sinh viên cung cấp.
 - Sinh viên đã trực tiếp chạy bốn kiểm tra trong cùng một lần và lưu ảnh bằng chứng. Phần tự sửa tài liệu của sinh viên chưa được ghi nhận.
+
+### CP7
+
+- Yêu cầu gửi Codex là chạy benchmark và eval thật, sửa KB dựa trên kết quả và nộp dữ liệu đo.
+- Codex chạy script gốc tại localhost, lấy baseline v1 và v2, thêm mục JWT và HPA vào KB của benchmark develop, rồi chạy gate 100% và phép thử v1 regression. Codex chạy bảy cấu hình tải và đối chiếu báo cáo với file JSON. Eval tắt lỗi mock ngẫu nhiên để đo chất lượng. CP7 dùng Pydantic tương thích đã có trong môi trường WSL2.
+- Phần sinh viên tự sửa hoặc tự kiểm CP7 chưa được ghi nhận.
