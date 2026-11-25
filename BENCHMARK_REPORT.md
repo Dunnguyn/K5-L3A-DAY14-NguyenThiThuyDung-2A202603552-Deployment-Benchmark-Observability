@@ -19,6 +19,12 @@
 
 Agent v2 sau khi bổ sung KB chạy trên cổng 8002. Mỗi cấu hình gửi 300 request. Latency trong JSON chỉ tính HTTP 200, error rate tính mọi request. Nguồn số liệu là [reports/](reports/). CP7 và stack Docker chạy cùng máy trong một phần phép đo, nên CPU và I/O dùng chung có thể ảnh hưởng các lần chạy tải cao.
 
+### Exercise 7.1 — Kiểm tra metrics
+
+Gửi một câu 40 ký tự vào `/ask` trên v2 rồi scrape `/metrics`. Output thực tế có Counter `http_requests_total{method="POST",route="/ask",status="200"} 1.0`, Gauge `agent_in_flight_requests 0.0` sau khi request kết thúc, và Histogram `agent_question_length_chars_count 1.0`, `_sum 40.0`. Bucket `le="20.0"` có 0 và `le="50.0"` có 1.
+
+Histogram dùng tập bucket cố định. Route template và nhãn `unmatched` gom URL lạ vào một nhóm. Dùng path thật làm label sẽ tạo series mới cho từng URL, làm phình bộ nhớ và dữ liệu scrape.
+
 ### 2.1 Concurrency vs latency
 
 | Concurrency | RPS | p50 (ms) | p95 (ms) | p99 (ms) | Error rate | SLO |

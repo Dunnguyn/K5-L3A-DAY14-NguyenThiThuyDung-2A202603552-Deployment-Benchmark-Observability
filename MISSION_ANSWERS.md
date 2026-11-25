@@ -818,6 +818,7 @@ Runtime CP5 đã được dọn, gồm các container kiểm thử, network và 
 
 - Yêu cầu gửi Codex là chạy benchmark và eval thật, sửa KB dựa trên kết quả và nộp dữ liệu đo.
 - Codex chạy script gốc tại localhost, lấy baseline v1 và v2, thêm mục JWT và HPA vào KB của benchmark develop, rồi chạy gate 100% và phép thử v1 regression. Codex chạy bảy cấu hình tải và đối chiếu báo cáo với file JSON. Eval tắt lỗi mock ngẫu nhiên để đo chất lượng. CP7 dùng Pydantic tương thích đã có trong môi trường WSL2.
+- Codex bổ sung histogram độ dài câu hỏi cho Exercise 7.1 và xác nhận một request 40 ký tự xuất hiện đúng trong scrape thực tế.
 - Phần sinh viên tự sửa hoặc tự kiểm CP7 chưa được ghi nhận.
 
 ### CP8
