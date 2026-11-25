@@ -254,6 +254,31 @@ Nginx tắt access log cho `/health` theo cấu hình. Header `Server: nginx` c�
 - `06-lab-complete/check_production_ready.py` — `73e4a70c13ba1127ffd7fafe14d2b9f6ce6ec016dccafd8ca3d416cf8817268a`
 - `06-lab-complete/benchmark-observability/develop/eval/golden_dataset.jsonl` — `22e672344ef72779959f3cf480391cef247b2f8ce86415010ddea9b315e959ec`
 
+## Part 3: Cloud Deployment
+
+### Exercise 3.1: Railway
+
+Agent Part 6 và Redis chạy trên Railway từ commit `02efc17`. [URL public](https://k5-l3a-day14-nguyenthithuydung-2a202603552-deplo-production.up.railway.app)
+
+Lần acceptance test lúc `2026-11-25T23:53:26+07:00` có đủ bốn kết quả trong cùng một lần chạy. `GET /health` trả 200 và `ok`. `GET /ready` trả 200 và `ready`. `POST /ask` thiếu key trả 401 và key hợp lệ trả 200 với mock LLM. [Lệnh kiểm thử và ảnh](DEPLOYMENT.md)
+
+### Exercise 3.2: Railway và Render
+
+| Hạng mục | Railway đã deploy | Render Blueprint |
+|---|---|---|
+| Build | `railway.toml` chọn Dockerfile trong service root `/06-lab-complete`. | `render.yaml` khai báo web service Docker, trỏ Dockerfile và build context vào `06-lab-complete` từ root repo. |
+| Probe | `healthcheckPath = "/health"`. | `healthCheckPath: /health`. |
+| Secrets | Service variables giữ key riêng và kết nối tới Redis trên Railway. | Blueprint tạo `AGENT_API_KEY`, yêu cầu nhập `REDIS_URL` do `sync: false` và đặt `ENVIRONMENT=production`. Redis cần cấp riêng. |
+
+Hai cấu hình dựa vào Dockerfile đọc `PORT`. `/health` kiểm tra tiến trình và `/ready` xác nhận Redis sẵn sàng.
+
+### Exercise 3.3: Cloud Run CI/CD
+
+1. Trigger push lên `main` được mô tả trong comment và phải cấu hình trong Cloud Build. Bước test cài requirements và chạy pytest. Script hiện có `echo` cuối và thiếu `set -e`, nên lỗi pytest có thể bị che.
+2. Cloud Build build image với tag theo `COMMIT_SHA` và `latest`, push cả hai tag, rồi chạy `gcloud run deploy` ở `asia-southeast1` bằng tag commit.
+3. Lệnh deploy cấu hình endpoint public, 1–10 instance, 1 CPU, 512 MiB, timeout 60 giây và lấy `OPENAI_API_KEY` từ Secret Manager.
+4. `service.yaml` là manifest riêng dùng với `gcloud run services replace`. Nó khai báo image `latest`, concurrency 80, cổng 8000, probe `/health` và `/ready`, cùng hai secret references. Pipeline hiện dùng lệnh deploy trực tiếp.
+
 ## Part 4: API Security
 
 Các đường dẫn nguồn dưới đây tính từ `04-api-gateway/`. Kiểm thử dùng mock LLM, WSL2, Python 3.14.4 (`posix`) trong `.venv`. FastAPI 0.115.0, Uvicorn 0.30.0 và Pydantic 2.14.4 đã phù hợp requirements. Cài thêm PyJWT 2.15.1 từ requirements production và giữ nguyên các file ghim gói.
@@ -685,7 +710,7 @@ Client gọi hai worker Uvicorn. `GET /health` đọc trạng thái liveness t�
 | 9 | Config | Env ưu tiên trước dotenv. Validate số nguyên và budget decimal. `.env.example` không có key thật. |
 | 10 | Logging | Formatter dùng `json.dumps`, gồm timestamp, level, event, route, HTTP status và duration. Uvicorn server logs đi riêng. |
 | 11 | Graceful shutdown | Uvicorn điều phối SIGTERM và lifespan cleanup, Docker `exec` để Uvicorn là PID 1. |
-| 12 | Deploy config | Railway và Render dùng Dockerfile và `/health`. Docker kiểm tra port mặc định và port tùy chỉnh. Public URL chờ CP6. |
+| 12 | Deploy config | Railway và Render dùng Dockerfile và `/health`. Docker kiểm tra port mặc định và port tùy chỉnh. Railway đã qua acceptance test CP6. Xem [DEPLOYMENT.md](DEPLOYMENT.md). |
 
 ### Cách chạy
 
@@ -751,7 +776,7 @@ Baseline `--static-only` báo 0/12. Sau implementation, static-only đạt đủ
 
 Host Python 3.14.4 dùng Pydantic 2.14.4 có sẵn và Redis client ghim 5.1.0. Dry-run chỉ cài wheel cho thấy `pydantic-core==2.23.2` của Pydantic ghim 2.9.0 chưa có wheel tương thích trong index được dùng. Giữ requirements gốc cho Docker Python 3.11, đã build và chạy thành công. Hai lượt QA đầu sửa lỗi tên module trùng trong harness và tên header không phân biệt hoa thường. Phép thử Redis recovery được chạy lại với host port cố định vì dùng publish port tự cấp có thể đổi endpoint sau restart. Các thay đổi này chỉ ở harness tạm. Lần cuối cả 25 kiểm thử runtime và kiểm integrity riêng đều đạt.
 
-Runtime CP5 đã được dọn, gồm các container kiểm thử, network và volume riêng. CP1–CP4 cùng AI log trước CP5 khớp từng byte. Checker, mock, golden dataset và script stateless đối chiếu SHA-256 đều khớp baseline. Public URL và cấu hình môi trường cloud chờ CP6.
+Runtime CP5 đã được dọn, gồm các container kiểm thử, network và volume riêng. CP1–CP4 cùng AI log trước CP5 khớp từng byte. Checker, mock, golden dataset và script stateless đối chiếu SHA-256 đều khớp baseline. Railway đã chạy agent Part 6 và Redis. Kết quả HTTP và ảnh deploy nằm trong [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## AI log
 
@@ -782,3 +807,9 @@ Runtime CP5 đã được dọn, gồm các container kiểm thử, network và 
 - Yêu cầu gửi Codex là hoàn thiện Part 6 theo K5, chạy checker nguyên bản, kiểm thử độc lập và giữ nguyên bài trước.
 - Codex triển khai config, API, guard Redis, logging, lifespan, Docker, Compose và cấu hình Railway/Render. Codex xác minh qua checker có Docker, HTTP thật, Redis riêng, kiểm thử đồng thời, SIGTERM, Docker stop và kiểm integrity. Chưa deploy lên cloud.
 - Sinh viên chưa được ghi nhận đã tự chỉnh hoặc tự kiểm. Sinh viên cần xác nhận thiết kế reservation, chạy lại full checker nếu cần và ghi phần tự kiểm thực tế.
+
+### CP6
+
+- Sinh viên cung cấp commit, URL, thời điểm và kết quả lần acceptance test trên Railway, cùng ba ảnh gốc.
+- Codex đối chiếu ba ảnh với kết quả, đọc cấu hình Railway, Render, Cloud Build và Cloud Run, rồi cập nhật Part 3, Part 6 và hồ sơ deploy. Lần kiểm thử dùng key được xác nhận qua ảnh do sinh viên cung cấp.
+- Sinh viên đã trực tiếp chạy bốn kiểm tra trong cùng một lần và lưu ảnh bằng chứng. Phần tự sửa tài liệu của sinh viên chưa được ghi nhận.
